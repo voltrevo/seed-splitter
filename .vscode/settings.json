@@ -1,0 +1,9 @@
+{
+  "deno.enable": true,
+  "deno.unstable": true,
+  "deno.lint": true,
+  "deno.config": "./.vscode/deno.jsonc",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "editor.rulers": [80]
+}
