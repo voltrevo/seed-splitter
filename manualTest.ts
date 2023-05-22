@@ -5,7 +5,7 @@ import SeedSplitter from "./mod.ts";
 
 // const curve = await SeedSplitter.fit([
 //   {
-//     label: "secret",
+//     name: "secret",
 //     mnemonic: secret.split(" "),
 //   },
 //   await SeedSplitter.randomPoint(),
@@ -24,9 +24,9 @@ const curve = await SeedSplitter.fit(
       return [];
     }
 
-    const [label, mnemonic] = line.split(": ");
+    const [name, mnemonic] = line.split(": ");
 
-    return { label, mnemonic: mnemonic.split(" ") };
+    return { name, mnemonic: mnemonic.split(" ") };
   }).flat(),
 );
 

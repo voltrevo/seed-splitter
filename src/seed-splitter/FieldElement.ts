@@ -125,8 +125,8 @@ class FieldElement {
     return fieldElement;
   }
 
-  toLabel() {
-    let label = "";
+  toName() {
+    let name = "";
 
     let x = this.n;
 
@@ -135,16 +135,16 @@ class FieldElement {
       x /= 27n;
 
       const c = cNum === 0n ? "-" : String.fromCodePoint(96 + Number(cNum));
-      label = c + label;
+      name = c + name;
     }
 
-    return label;
+    return name;
   }
 
-  static fromLabel(label: string) {
+  static fromName(name: string) {
     let x = 0n;
 
-    for (const c of label) {
+    for (const c of name) {
       x *= 27n;
 
       if (["-", "_", " "].includes(c)) {

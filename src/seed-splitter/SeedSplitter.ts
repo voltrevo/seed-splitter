@@ -2,7 +2,7 @@ import FieldElement from "./FieldElement.ts";
 import Polynomial from "./Polynomial.ts";
 
 export type Point = {
-  label: string;
+  name: string;
   mnemonic: string[];
 };
 
@@ -11,8 +11,8 @@ export default class SeedSplitter {
 
   static async fit(points: Point[]) {
     const rawPoints = await Promise.all(
-      points.map(async ({ label, mnemonic }) => ({
-        x: FieldElement.fromLabel(label),
+      points.map(async ({ name, mnemonic }) => ({
+        x: FieldElement.fromName(name),
         y: await FieldElement.fromMnemonic(mnemonic),
       })),
     );
@@ -47,8 +47,8 @@ export default class SeedSplitter {
     return new SeedSplitter(sum);
   }
 
-  async calculate(label: string) {
-    const x = FieldElement.fromLabel(label);
+  async calculate(name: string) {
+    const x = FieldElement.fromName(name);
     const y = this.poly.calculate(x);
 
     return await y.toMnemonic();
@@ -56,7 +56,7 @@ export default class SeedSplitter {
 
   static async randomPoint(): Promise<Point> {
     return {
-      label: FieldElement.random().toLabel(),
+      name: FieldElement.random().toName(),
       mnemonic: await FieldElement.random().toMnemonic(),
     };
   }
