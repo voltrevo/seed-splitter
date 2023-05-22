@@ -41,10 +41,8 @@ export default async function manual() {
     const choice = promptChoices([
       ["Specify a point", specifyPoint],
       ["Remove a specified point", removeSpecifiedPoint],
-      ["Add a point for calculation", async () => {
-      }],
-      ["Remove a point from calculation", async () => {
-      }],
+      ["Add a point for calculation", addCalculationPoint],
+      ["Remove a point from calculation", removeCalculationPoint],
       ["Exit", () => {
         Deno.exit(0);
       }],
@@ -128,4 +126,43 @@ function removeSpecifiedPoint(state: State) {
   const name = promptChoices(state.points.map((p) => [p.name, p.name]));
 
   state.points = state.points.filter((p) => p.name !== name);
+}
+
+function addCalculationPoint(state: State) {
+  // TODO: Deduplicate
+  let name: string | null;
+
+  while (true) {
+    name = prompt("Name:");
+
+    if (name === null) {
+      continue;
+    }
+
+    try {
+      name = FieldElement.fromName(name).toName();
+    } catch (error) {
+      console.error(error.message);
+      continue;
+    }
+
+    break;
+  }
+
+  state.namesToCalculate.push(name);
+}
+
+function removeCalculationPoint(state: State) {
+  console.log();
+
+  if (state.namesToCalculate.length === 0) {
+    console.log("(No calculation points)");
+    return;
+  }
+
+  console.log("Which point should be removed?\n");
+
+  const name = promptChoices(state.namesToCalculate.map((n) => [n, n]));
+
+  state.namesToCalculate = state.namesToCalculate.filter((n) => n !== name);
 }
