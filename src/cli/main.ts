@@ -27,7 +27,7 @@ export default async function main() {
     ["Manual mode", todo("manual")],
   ]);
 
-  console.clear();
+  console.log();
 
   await choice();
 }
