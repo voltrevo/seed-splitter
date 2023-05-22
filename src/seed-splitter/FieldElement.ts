@@ -2,6 +2,8 @@ import bip39WordList from "./bip39WordList.ts";
 
 const P = 2n ** 128n - 159n; // The largest prime below 2**128
 
+const nameChars = "-abcdefghijklmnopqrstuvwxyz0123456789";
+
 class FieldElement {
   constructor(public n: bigint) {}
 
@@ -131,11 +133,8 @@ class FieldElement {
     let x = this.n;
 
     while (x > 0n) {
-      const cNum = x % 27n;
-      x /= 27n;
-
-      const c = cNum === 0n ? "-" : String.fromCodePoint(96 + Number(cNum));
-      name = c + name;
+      name = nameChars[Number(x % 37n)] + name;
+      x /= 37n;
     }
 
     return name;
@@ -144,20 +143,22 @@ class FieldElement {
   static fromName(name: string) {
     let x = 0n;
 
-    for (const c of name) {
-      x *= 27n;
+    for (let c of name) {
+      x *= BigInt(nameChars.length);
 
-      if (["-", "_", " "].includes(c)) {
-        x += 0n;
+      if (["_", " "].includes(c)) {
+        c = "-";
       } else {
-        const code = (c.toLowerCase().codePointAt(0) ?? 0) - 96;
-
-        if (code < 0 || code >= 27) {
-          throw new Error(`Invalid code point ${c}`);
-        }
-
-        x += BigInt(code);
+        c = c.toLowerCase();
       }
+
+      const index = nameChars.indexOf(c);
+
+      if (index === -1) {
+        throw new Error(`Unsupported character '${c}'`);
+      }
+
+      x += BigInt(index);
     }
 
     return new FieldElement(x);
