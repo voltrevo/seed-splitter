@@ -4,9 +4,7 @@ import promptInteger from "./promptInteger.ts";
 import promptMnemonic from "./promptSeedPhrase.ts";
 
 export default async function recover() {
-  console.log(
-    "Enter the number of shares needed to recover the secret",
-  );
+  console.log("Enter the number of shares needed to recover the secret");
 
   const K = promptInteger(
     "K:",

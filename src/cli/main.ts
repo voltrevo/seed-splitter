@@ -1,8 +1,8 @@
 import heading from "./heading.ts";
+import manual from "./manual.ts";
 import promptChoices from "./promptChoices.ts";
 import recover from "./recover.ts";
 import split from "./split.ts";
-import todo from "./todo.ts";
 
 export default async function main() {
   heading("Seed Splitter");
@@ -18,13 +18,15 @@ export default async function main() {
     "points, not just the ones that originally generated the polynomial. With",
     "this same polynomial, you can recalculate any of the other points.",
     "",
+    "This technique is known as Shamir's Secret Sharing.",
+    "",
   ].join("\n"));
 
   const choice = promptChoices([
     ["Split an existing seed phrase", split(false)],
     ["Generate and split a seed phrase", split(true)],
     ["Recover a seed phrase", recover],
-    ["Manual mode", todo("manual")],
+    ["Manual mode", manual],
   ]);
 
   console.log();
