@@ -1,3 +1,5 @@
+import promptInteger from "./promptInteger.ts";
+
 type Choice<T> = [
   description: string,
   value: T,
@@ -10,26 +12,15 @@ export default function promptChoices<T>(choices: Choice<T>[]) {
 
   console.log();
 
+  const invalidMessage =
+    `Please enter a number from 1 to ${choices.length} (or 'exit')`;
+
   while (true) {
-    const input = prompt("Choice:");
+    const input = promptInteger("Choice:", invalidMessage);
+    const choice = choices.at(input - 1);
 
-    if (input !== null && ["exit", "quit", "stop"].includes(input)) {
-      Deno.exit(0);
-    }
-
-    const inputNum = parseInt(input ?? "x", 10);
-
-    const choice = choices.at(inputNum - 1);
-
-    if (
-      input === null ||
-      !/^ *[1-9][0-9]* *$/.test(input) ||
-      choice === undefined
-    ) {
-      console.log(
-        `Please enter a number from 1 to ${choices.length} (or 'exit')`,
-      );
-
+    if (choice === undefined) {
+      console.log(invalidMessage);
       continue;
     }
 
