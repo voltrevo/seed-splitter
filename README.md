@@ -2,6 +2,28 @@
 
 A simple and dependency-free implementation of Shamir's secret sharing.
 
+## Example
+
+With Seed Splitter, you can split a key like this:
+
+```
+vault soap student engine hub blanket tortoise fit device critic stage clay
+```
+
+into 5 shares like this:
+
+```
+s1: topple human laundry luggage will object behave common agree plate spin frog
+s2: edit retire pumpkin ritual sorry shove horn lounge orbit coach unhappy return
+s3: shrimp cheap snake earn miracle extend hair disagree giraffe news ensure uniform
+s4: grunt rookie swing celery crush cup afraid fruit fitness term unable injury
+s5: chase isolate surge fluid shock inside drastic throw later arm source bargain
+```
+
+you can then use any 3 of those shares to recover the secret.
+
+Any K of N is also supported.
+
 ## Quick Start
 
 ```sh
@@ -30,7 +52,7 @@ provide any IO access.
 
 ¹ Not including the CLI. Use `templates/*` if you want the minimum surface area.
 
-## Example
+## Longer Example
 
 Consider that Alice has this secret key:
 
