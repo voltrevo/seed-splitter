@@ -1,4 +1,4 @@
-import bip39WordList from "./bip39Wordlist.ts";
+import bip39WordList from "./bip39WordList.ts";
 
 const P = 2n ** 128n - 159n; // The largest prime below 2**128
 

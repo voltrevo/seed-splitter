@@ -35,7 +35,7 @@ export default class Polynomial {
     return res;
   }
 
-  eval(x: FieldElement) {
+  calculate(x: FieldElement) {
     if (this.coeffs.length === 0) {
       return new FieldElement(0n);
     }

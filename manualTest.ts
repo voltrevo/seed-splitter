@@ -1,15 +1,15 @@
-import RecoveryCurve from "./src/RecoveryCurve.ts";
+import SeedSplitter from "./mod.ts";
 
 // const secret =
 //   "expire gun route tornado female reflect holiday grief spring clown deliver army";
 
-// const curve = await RecoveryCurve.fit([
+// const curve = await SeedSplitter.fit([
 //   {
 //     label: "secret",
 //     mnemonic: secret.split(" "),
 //   },
-//   await RecoveryCurve.randomPoint(),
-//   await RecoveryCurve.randomPoint(),
+//   await SeedSplitter.randomPoint(),
+//   await SeedSplitter.randomPoint(),
 // ]);
 
 const recoveryData = `
@@ -18,7 +18,7 @@ daniel: long neutral reject ahead cart proud shoulder auction april same solar m
 emily: come foam country senior awkward task possible auction spice hidden sphere giraffe
 `;
 
-const curve = await RecoveryCurve.fit(
+const curve = await SeedSplitter.fit(
   recoveryData.split("\n").map((line) => {
     if (line.trim() === "") {
       return [];
@@ -42,5 +42,5 @@ const names = [
 ];
 
 for (const name of names) {
-  console.log(`${name}:`, (await curve.eval(name)).join(" "));
+  console.log(`${name}:`, (await curve.calculate(name)).join(" "));
 }

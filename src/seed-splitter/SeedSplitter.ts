@@ -1,12 +1,12 @@
 import FieldElement from "./FieldElement.ts";
 import Polynomial from "./Polynomial.ts";
 
-type Point = {
+export type Point = {
   label: string;
   mnemonic: string[];
 };
 
-export default class RecoveryCurve {
+export default class SeedSplitter {
   private constructor(public poly: Polynomial) {}
 
   static async fit(points: Point[]) {
@@ -37,19 +37,19 @@ export default class RecoveryCurve {
 
       poly = poly.mul(
         new Polynomial([
-          poly.eval(share.x).inverse().mul(share.y),
+          poly.calculate(share.x).inverse().mul(share.y),
         ]),
       );
 
       sum = sum.add(poly);
     }
 
-    return new RecoveryCurve(sum);
+    return new SeedSplitter(sum);
   }
 
-  async eval(label: string) {
+  async calculate(label: string) {
     const x = FieldElement.fromLabel(label);
-    const y = this.poly.eval(x);
+    const y = this.poly.calculate(x);
 
     return await y.toMnemonic();
   }
