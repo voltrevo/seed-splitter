@@ -1,13 +1,12 @@
+import heading from "./heading.ts";
 import promptChoices from "./promptChoices.ts";
-import splitExisting from "./splitExisting.ts";
+import split from "./split.ts";
 import todo from "./todo.ts";
 
 export default async function main() {
+  heading("Seed Splitter");
+
   console.log([
-    "=========================================================================",
-    "============================= Seed Splitter =============================",
-    "=========================================================================",
-    "",
     "This is a tool which splits 12-word seed phrases.",
     "",
     "It does this by fitting a polynomial to K points of your choosing. Once",
@@ -21,8 +20,8 @@ export default async function main() {
   ].join("\n"));
 
   const choice = promptChoices([
-    ["Split an existing seed phrase", splitExisting],
-    ["Generate and split a seed phrase", todo("generateAndSplit")],
+    ["Split an existing seed phrase", split(false)],
+    ["Generate and split a seed phrase", split(true)],
     ["Recover a seed phrase", todo("recover")],
     ["Manual mode", todo("manual")],
   ]);
