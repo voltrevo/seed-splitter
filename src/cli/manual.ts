@@ -14,7 +14,7 @@ export default async function manual() {
 
   console.log([
     "Welcome to manual mode. This mode reflects the underlying math of",
-    "Shamir's Secret Sharing with minimal guidance. It can be used for:",
+    "Shamir's secret sharing with minimal guidance. It can be used for:",
     "",
     "- Both generation and recovery",
     "- Educational purposes",

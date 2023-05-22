@@ -18,7 +18,7 @@ export default async function main() {
     "points, not just the ones that originally generated the polynomial. With",
     "this same polynomial, you can recalculate any of the other points.",
     "",
-    "This technique is known as Shamir's Secret Sharing.",
+    "This technique is known as Shamir's secret sharing.",
     "",
   ].join("\n"));
 
