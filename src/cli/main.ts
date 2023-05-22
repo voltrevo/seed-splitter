@@ -1,4 +1,5 @@
 import promptChoices from "./promptChoices.ts";
+import splitExisting from "./splitExisting.ts";
 import todo from "./todo.ts";
 
 export default async function main() {
@@ -20,7 +21,7 @@ export default async function main() {
   ].join("\n"));
 
   const choice = promptChoices([
-    ["Split an existing seed phrase", todo("splitExisting")],
+    ["Split an existing seed phrase", splitExisting],
     ["Generate and split a seed phrase", todo("generateAndSplit")],
     ["Recover a seed phrase", todo("recover")],
     ["Manual mode", todo("manual")],
