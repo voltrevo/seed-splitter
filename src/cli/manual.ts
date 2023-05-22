@@ -93,10 +93,22 @@ async function specifyPoint(state: State) {
   let name: string | null;
 
   while (true) {
-    name = prompt("Name:");
+    name = prompt("Name: [random]");
 
     if (name === null) {
-      continue;
+      let randomIndex = 1;
+
+      while (
+        state.points.map((p) => p.name).includes(`random-${randomIndex}`)
+      ) {
+        randomIndex++;
+      }
+
+      name = `random-${randomIndex}`;
+      const mnemonic = await FieldElement.random().toMnemonic();
+
+      state.points.push({ name, mnemonic });
+      return;
     }
 
     try {
