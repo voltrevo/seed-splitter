@@ -45,6 +45,8 @@
 .output {
   background-color: #f8f8f8;
   color: #555;
+  font-family: monospace;
+  font-size: 0.9em;
 }
 
 .pointsList {
@@ -59,6 +61,28 @@
   margin-bottom: 10px;
   border-radius: 4px;
   border-left: 5px solid #4CAF50;
+  display: flex;
+  justify-content: space-between; /* Aligns content and button on opposite ends */
+  align-items: center; /* Centers items vertically */
+}
+
+.pointContent {
+  flex-grow: 1; /* Allows the content to fill the space */
+}
+
+.deleteButton {
+  background-color: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: 10px; /* Adds some space between the content and the button */
+  font-size: 1.2rem; /* Makes the 'x' character slightly larger */
+}
+
+.deleteButton:hover {
+  background-color: #ff3333; /* A slightly darker shade for the hover state */
 }
 
 .mnemonicDisplay {
@@ -157,5 +181,5 @@
 
 .pointMnemonic {
   font-family: monospace;
-  font-size: 0.9em;
+  font-size: 0.8em;
 }

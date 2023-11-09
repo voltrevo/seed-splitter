@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SeedSplitter, { Point } from "./seed-splitter/SeedSplitter.ts";
 import styles from "./App.module.css";
 import bip39WordList from "./seed-splitter/bip39WordList.ts";
+import FieldElement from "./seed-splitter/FieldElement.ts";
 
 const App: React.FC = () => {
   const [points, setPoints] = useState<Point[]>([]);
@@ -13,10 +14,31 @@ const App: React.FC = () => {
   const [mnemonicWords, setMnemonicWords] = useState<string[]>(Array(12).fill(''));
   const [validWords, setValidWords] = useState<boolean[]>(Array(12).fill(false));
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+  const [randomName, setRandomName] = useState<string | null>(null);
 
-  const addPoint = async () => {
+  const addRandomPoint = async () => {
     try {
-      const randomPoint = await SeedSplitter.randomPoint();
+      let name = randomName;
+
+      if (!name) {
+        for (let i = 1; ; i++) {
+          const candidate = `RANDOM-${i}`;
+          
+          if (points.every(p => p.name !== candidate)) {
+            name = candidate;
+            break;
+          }
+        }
+      }
+
+      if (points.some(p => p.name === name)) {
+        throw new Error('Point already exists');
+      }
+
+      const randomPoint: Point = {
+        name,
+        mnemonic: await FieldElement.random().toMnemonic(),
+      };
       setPoints([...points, randomPoint]);
     } catch (err: any) {
       setError(err.message);
@@ -40,18 +62,21 @@ const App: React.FC = () => {
     }
   };
 
-  const calculateMnemonic = async () => {
-    try {
-      if (points.length < 2) {
-        throw new Error("You need at least two points to fit a polynomial.");
+  useEffect(() => {
+    (async () => {
+      try {
+        if (points.length < 2 || !name) {
+          setMnemonic(null);
+          return;
+        }
+        const seedSplitter = await SeedSplitter.fit(points);
+        const calculatedMnemonic = await seedSplitter.calculate(name);
+        setMnemonic(calculatedMnemonic.join(' '));
+      } catch (err: any) {
+        setError(err.message);
       }
-      const seedSplitter = await SeedSplitter.fit(points);
-      const calculatedMnemonic = await seedSplitter.calculate(name);
-      setMnemonic(calculatedMnemonic.join(' '));
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
+    })();
+  }, [name, points]);
 
   useEffect(() => {
     setValidWords(mnemonicWords.map((word, index) => 
@@ -68,28 +93,34 @@ const App: React.FC = () => {
     return bip39WordList.some((validWord) => validWord.startsWith(word.toLowerCase()));
   };
 
+  const handleDeletePoint = (index: number) => {
+    const updatedPoints = points.filter((_, i) => i !== index);
+    setPoints(updatedPoints);
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Seed Splitter</h1>
       {error && <p className={styles.error}>Error: {error}</p>}
 
       <div className={styles.section}>
-        <button className={styles.button} onClick={addPoint}>Add Random Point</button>
+      <input className={styles.input} type="text" placeholder="Optional: Point Name" value={randomName ?? ''} onChange={(e) => setRandomName(normalizeName(e.target.value))} />
+        <button className={styles.button} onClick={addRandomPoint}>Add Random Point</button>
       </div>
 
       <div className={styles.section}>
-        <input className={styles.input} type="text" placeholder="Point Name" value={name} onChange={(e) => setName(e.target.value)} />
-        <button className={styles.button} onClick={calculateMnemonic}>Calculate Point</button>
-        {mnemonic && <div className={styles.output}>Mnemonic: {mnemonic}</div>}
+      <h2 className={styles.sectionTitle}>Calculate a Point</h2>
+        <input className={styles.input} type="text" placeholder="Point Name" value={name} onChange={(e) => setName(normalizeName(e.target.value))} />
+        <div className={styles.output}>{mnemonic}</div>
       </div>
 
       <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Add a Custom Point</h2>
+        <h2 className={styles.sectionTitle}>Specify a Point</h2>
         <input
           className={styles.inputName}
           type="text"
           value={newPointName}
-          onChange={(e) => setNewPointName(e.target.value)}
+          onChange={(e) => setNewPointName(normalizeName(e.target.value))}
           placeholder="Point Name"
         />
         <div className={styles.grid}>
@@ -115,12 +146,17 @@ const App: React.FC = () => {
       </div>
 
       <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Points</h2>
+        <h2 className={styles.sectionTitle}>Curve</h2>
         <ul className={styles.pointsList}>
           {points.map((point, index) => (
             <li key={index} className={styles.pointItem}>
-              <div className={styles.pointName}>{point.name}</div>
-              <div className={styles.pointMnemonic}>{point.mnemonic.join(' ')}</div>
+              <div className={styles.pointContent}>
+                <div className={styles.pointName}>{point.name}</div>
+                <div className={styles.pointMnemonic}>{point.mnemonic.join(' ')}</div>
+              </div>
+              <button className={styles.deleteButton} onClick={() => handleDeletePoint(index)}>
+                &times; {/* This is a simple 'x' character used as a delete icon */}
+              </button>
             </li>
           ))}
         </ul>
@@ -128,5 +164,9 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+function normalizeName(name: string) {
+  return name.replaceAll(' ', '-').toUpperCase();
+}
 
 export default App;
