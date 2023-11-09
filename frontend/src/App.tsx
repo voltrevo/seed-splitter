@@ -104,14 +104,9 @@ const App: React.FC = () => {
       {error && <p className={styles.error}>Error: {error}</p>}
 
       <div className={styles.section}>
-      <input className={styles.input} type="text" placeholder="Optional: Point Name" value={randomName ?? ''} onChange={(e) => setRandomName(normalizeName(e.target.value))} />
-        <button className={styles.button} onClick={addRandomPoint}>Add Random Point</button>
-      </div>
-
-      <div className={styles.section}>
-      <h2 className={styles.sectionTitle}>Calculate a Point</h2>
-        <input className={styles.input} type="text" placeholder="Point Name" value={name} onChange={(e) => setName(normalizeName(e.target.value))} />
-        <div className={styles.output}>{mnemonic}</div>
+      <h2 className={styles.sectionTitle}>Add a Random Point</h2>
+        <input className={styles.input} type="text" placeholder="Optional: Point Name" value={randomName ?? ''} onChange={(e) => setRandomName(normalizeName(e.target.value))} />
+        <button className={styles.button} onClick={addRandomPoint}>Add</button>
       </div>
 
       <div className={styles.section}>
@@ -142,11 +137,12 @@ const App: React.FC = () => {
             </div>
           ))}
         </div>
-        <button className={styles.button} onClick={addCustomPoint}>Add Point</button>
+        <button className={styles.button} onClick={addCustomPoint}>Add</button>
       </div>
 
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>Curve</h2>
+        {points.length === 0 && "No points yet"}
         <ul className={styles.pointsList}>
           {points.map((point, index) => (
             <li key={index} className={styles.pointItem}>
@@ -160,6 +156,12 @@ const App: React.FC = () => {
             </li>
           ))}
         </ul>
+      </div>
+
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>Calculate a Point</h2>
+        <input className={styles.input} type="text" placeholder="Point Name" value={name} onChange={(e) => setName(normalizeName(e.target.value))} />
+        <div className={styles.output}>{mnemonic}</div>
       </div>
     </div>
   );
